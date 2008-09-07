@@ -1,0 +1,45 @@
+<!-- IDEA 2 -->
+
+<widget img_shape="img/bg.png" id="simple_clock">
+  <container id="main_container">
+    <canvas size="simple_clock.size" id="clock_canvas">
+    <%
+      def hand_line(center, length, val, max)
+        angle = (Math::PI * ((val * 360.0) / max)) / 180.0
+        px = center[0] + (Math.cos(angle) * length)
+        py = center[1] + (Math.sin(angle) * length)
+        return [px, py]
+      end
+      
+      center = canvas.center
+      seconds_hand = canvas.line(
+        :points => [[0, 0], [0, 0]],
+        :width => 3,
+        :color => "blue"
+      )
+      minutes_hand = canvas.line(
+        :points => [[0, 0], [0, 0]],
+        :width => 4,
+        :color => "green"
+      )
+      hours_hand = canvas.line(
+        :points => [[0, 0], [0, 0]],
+        :width => 5,
+        :color => "red"
+      )
+      @seconds = Timer.each(1.second) do
+        seconds_hand.points = [
+          center,
+          hand_line(center, 100, Time.now.sec, 60),
+        ]
+      end
+      @minutes = Timer.each(1.minute) do
+        minutes_hand.points = [
+          center,
+          hand_line(center, 80, Time.now.min, 60)
+        ]
+      end
+    %>
+    </canvas>
+  </container>
+</widget>
